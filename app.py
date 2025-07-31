@@ -406,6 +406,7 @@ def prediction_page(data):
                         st.session_state.attendance = 95.0
                         st.session_state.study_hours = 5.0
                         st.session_state.past_scores = 90.0
+                    st.markdown('</div>', unsafe_allow_html=True)
                 with col_preset2:
                     st.markdown('<div class="preset-average">', unsafe_allow_html=True)
                     if st.button("📊 Average", help="Average student", key="average_preset", use_container_width=True):
@@ -419,7 +420,7 @@ def prediction_page(data):
                         st.session_state.attendance = 60.0
                         st.session_state.study_hours = 1.5
                         st.session_state.past_scores = 55.0
-                        st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
 
 
