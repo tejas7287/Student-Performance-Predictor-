@@ -139,6 +139,55 @@ st.markdown("""
         margin: 1rem 0;
         border-left: 4px solid #ff6b6b;
     }
+    .preset-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin: 1rem 0;
+        border: 1px solid #dee2e6;
+    }
+    .preset-excellent .stButton > button {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    .preset-excellent .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4) !important;
+    }
+    .preset-average .stButton > button {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    .preset-average .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4) !important;
+    }
+    .preset-at-risk .stButton > button {
+        background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3) !important;
+        transition: all 0.3s ease !important;
+    }
+    .preset-at-risk .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -343,24 +392,33 @@ def prediction_page(data):
                     help="Enter past academic scores (0-100)"
                 )
 
-                # Quick preset buttons
-                st.markdown("**Quick Presets:**")
-                col_preset1, col_preset2, col_preset3 = st.columns(3)
+                st.markdown('<div class="preset-section">', unsafe_allow_html=True)
+                st.markdown("### 🎯 Quick Presets")
+                st.markdown("*Click to instantly set values for different student profiles:*")
+                
+                col_preset1, col_preset2, col_preset3 = st.columns(3, gap="medium")
                 with col_preset1:
-                    if st.button("🌟 Excellent", help="High performer"):
+                    st.markdown('<div class="preset-excellent">', unsafe_allow_html=True)
+                    if st.button("🌟 Excellent", help="High performer", key="excellent_preset", use_container_width=True):
                         st.session_state.attendance = 95.0
                         st.session_state.study_hours = 5.0
                         st.session_state.past_scores = 90.0
+                    st.markdown('</div>', unsafe_allow_html=True)
                 with col_preset2:
-                    if st.button("📊 Average", help="Average student"):
+                    st.markdown('<div class="preset-average">', unsafe_allow_html=True)
+                    if st.button("📊 Average", help="Average student", key="average_preset", use_container_width=True):
                         st.session_state.attendance = 80.0
                         st.session_state.study_hours = 3.0
                         st.session_state.past_scores = 75.0
+                    st.markdown('</div>', unsafe_allow_html=True)
                 with col_preset3:
-                    if st.button("⚠️ At Risk", help="Struggling student"):
+                    st.markdown('<div class="preset-at-risk">', unsafe_allow_html=True)
+                    if st.button("⚠️ At Risk", help="Struggling student", key="at_risk_preset", use_container_width=True):
                         st.session_state.attendance = 60.0
                         st.session_state.study_hours = 1.5
                         st.session_state.past_scores = 55.0
+                    st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
                 # Use session state values if they exist
                 if 'attendance' in st.session_state:
