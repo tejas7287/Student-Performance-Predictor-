@@ -478,13 +478,18 @@ def prediction_page(data):
             if model_choice == 'Linear Regression':
                 model = models[model_choice]
                 input_scaled = scaler.transform(input_data)
+                import scipy.sparse
+                if scipy.sparse.issparse(input_scaled):
+                    input_scaled = input_scaled.toarray()
+                else:
+                    input_scaled = np.asarray(input_scaled)
                 coefficients = model.coef_
                 intercept = model.intercept_
 
                 contributions = {
-                    'Attendance': coefficients[0] * input_scaled[0][0],
-                    'Study Hours': coefficients[1] * input_scaled[0][1],
-                    'Past Scores': coefficients[2] * input_scaled[0][2],
+                    'Attendance': coefficients[0] * input_scaled[0, 0],
+                    'Study Hours': coefficients[1] * input_scaled[0, 1],
+                    'Past Scores': coefficients[2] * input_scaled[0, 2],
                     'Base Score': intercept
                 }
             else:
@@ -842,7 +847,7 @@ def model_performance_page(data):
             # Residual distribution
             fig = px.histogram(x=residuals, nbins=20, title="Distribution of Prediction Errors")
             fig.add_vline(x=0, line_dash="dash", line_color="red", annotation_text="Perfect")
-            fig.update_xaxis(title="Residuals (Actual - Predicted)")
+            fig.update_xaxes(title="Residuals (Actual - Predicted)")
             st.plotly_chart(fig, use_container_width=True)
 
             # Error statistics
@@ -861,8 +866,8 @@ def model_performance_page(data):
             # Residuals vs predicted
             fig = px.scatter(x=y_pred_demo, y=residuals, title="Residuals vs Predicted Values")
             fig.add_hline(y=0, line_dash="dash", line_color="red")
-            fig.update_xaxis(title="Predicted Performance (%)")
-            fig.update_yaxis(title="Residuals")
+            fig.update_xaxes(title="Predicted Performance (%)")
+            fig.update_yaxes(title="Residuals")
             st.plotly_chart(fig, use_container_width=True)
 
             # Pattern analysis
