@@ -139,6 +139,58 @@ st.markdown("""
         margin: 1rem 0;
         border-left: 4px solid #ff6b6b;
     }
+    .preset-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin: 1rem 0;
+        border: 1px solid #dee2e6;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-excellent_preset button[data-testid="stBaseButton-secondary"] {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3) !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-excellent_preset button[data-testid="stBaseButton-secondary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4) !important;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-average_preset button[data-testid="stBaseButton-secondary"] {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3) !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-average_preset button[data-testid="stBaseButton-secondary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4) !important;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-at_risk_preset button[data-testid="stBaseButton-secondary"] {
+        background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 0.75rem !important;
+        padding: 0.75rem 1.5rem !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3) !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    .stElementContainer[data-testid="stElementContainer"].st-key-at_risk_preset button[data-testid="stBaseButton-secondary"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -343,24 +395,33 @@ def prediction_page(data):
                     help="Enter past academic scores (0-100)"
                 )
 
-                # Quick preset buttons
-                st.markdown("**Quick Presets:**")
-                col_preset1, col_preset2, col_preset3 = st.columns(3)
+                st.markdown('<div class="preset-section">', unsafe_allow_html=True)
+                st.markdown("### 🎯 Quick Presets")
+                st.markdown("*Click to instantly set values for different student profiles:*")
+
+                col_preset1, col_preset2, col_preset3 = st.columns([1, 1, 1], gap="large")
                 with col_preset1:
-                    if st.button("🌟 Excellent", help="High performer"):
+                    st.markdown('<div class="preset-excellent">', unsafe_allow_html=True)
+                    if st.button("🌟 Excellent", help="High performer", key="excellent_preset", use_container_width=True):
                         st.session_state.attendance = 95.0
                         st.session_state.study_hours = 5.0
                         st.session_state.past_scores = 90.0
                 with col_preset2:
-                    if st.button("📊 Average", help="Average student"):
+                    st.markdown('<div class="preset-average">', unsafe_allow_html=True)
+                    if st.button("📊 Average", help="Average student", key="average_preset", use_container_width=True):
                         st.session_state.attendance = 80.0
                         st.session_state.study_hours = 3.0
                         st.session_state.past_scores = 75.0
+                    st.markdown('</div>', unsafe_allow_html=True)
                 with col_preset3:
-                    if st.button("⚠️ At Risk", help="Struggling student"):
+                    st.markdown('<div class="preset-at-risk">', unsafe_allow_html=True)
+                    if st.button("⚠️ At Risk", help="Struggling student", key="at_risk_preset", use_container_width=True):
                         st.session_state.attendance = 60.0
                         st.session_state.study_hours = 1.5
                         st.session_state.past_scores = 55.0
+                         st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+
 
                 # Use session state values if they exist
                 if 'attendance' in st.session_state:
@@ -478,13 +539,18 @@ def prediction_page(data):
             if model_choice == 'Linear Regression':
                 model = models[model_choice]
                 input_scaled = scaler.transform(input_data)
+                import scipy.sparse
+                if scipy.sparse.issparse(input_scaled):
+                    input_scaled = input_scaled.toarray()
+                else:
+                    input_scaled = np.asarray(input_scaled)
                 coefficients = model.coef_
                 intercept = model.intercept_
 
                 contributions = {
-                    'Attendance': coefficients[0] * input_scaled[0][0],
-                    'Study Hours': coefficients[1] * input_scaled[0][1],
-                    'Past Scores': coefficients[2] * input_scaled[0][2],
+                    'Attendance': coefficients[0] * input_scaled[0, 0],
+                    'Study Hours': coefficients[1] * input_scaled[0, 1],
+                    'Past Scores': coefficients[2] * input_scaled[0, 2],
                     'Base Score': intercept
                 }
             else:
@@ -842,7 +908,7 @@ def model_performance_page(data):
             # Residual distribution
             fig = px.histogram(x=residuals, nbins=20, title="Distribution of Prediction Errors")
             fig.add_vline(x=0, line_dash="dash", line_color="red", annotation_text="Perfect")
-            fig.update_xaxis(title="Residuals (Actual - Predicted)")
+            fig.update_xaxes(title="Residuals (Actual - Predicted)")
             st.plotly_chart(fig, use_container_width=True)
 
             # Error statistics
@@ -861,8 +927,8 @@ def model_performance_page(data):
             # Residuals vs predicted
             fig = px.scatter(x=y_pred_demo, y=residuals, title="Residuals vs Predicted Values")
             fig.add_hline(y=0, line_dash="dash", line_color="red")
-            fig.update_xaxis(title="Predicted Performance (%)")
-            fig.update_yaxis(title="Residuals")
+            fig.update_xaxes(title="Predicted Performance (%)")
+            fig.update_yaxes(title="Residuals")
             st.plotly_chart(fig, use_container_width=True)
 
             # Pattern analysis
