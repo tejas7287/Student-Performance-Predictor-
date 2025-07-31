@@ -396,7 +396,7 @@ def prediction_page(data):
                 st.markdown("### 🎯 Quick Presets")
                 st.markdown("*Click to instantly set values for different student profiles:*")
                 
-                col_preset1, col_preset2, col_preset3 = st.columns(3, gap="medium")
+                col_preset1, col_preset2, col_preset3 = st.columns([1, 1, 1], gap="large")
                 with col_preset1:
                     st.markdown('<div class="preset-excellent">', unsafe_allow_html=True)
                     if st.button("🌟 Excellent", help="High performer", key="excellent_preset", use_container_width=True):
