@@ -146,7 +146,7 @@ st.markdown("""
         margin: 1rem 0;
         border: 1px solid #dee2e6;
     }
-    .preset-excellent button[data-testid="stBaseButton-secondary"] {
+    .stElementContainer[data-testid="stElementContainer"].st-key-excellent_preset button[data-testid="stBaseButton-secondary"] {
         background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
         color: white !important;
         border: none !important;
@@ -157,11 +157,11 @@ st.markdown("""
         transition: all 0.3s ease !important;
         width: 100% !important;
     }
-    .preset-excellent button[data-testid="stBaseButton-secondary"]:hover {
+    .stElementContainer[data-testid="stElementContainer"].st-key-excellent_preset button[data-testid="stBaseButton-secondary"]:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4) !important;
     }
-    .preset-average button[data-testid="stBaseButton-secondary"] {
+    .stElementContainer[data-testid="stElementContainer"].st-key-average_preset button[data-testid="stBaseButton-secondary"] {
         background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
         color: white !important;
         border: none !important;
@@ -172,11 +172,11 @@ st.markdown("""
         transition: all 0.3s ease !important;
         width: 100% !important;
     }
-    .preset-average button[data-testid="stBaseButton-secondary"]:hover {
+    .stElementContainer[data-testid="stElementContainer"].st-key-average_preset button[data-testid="stBaseButton-secondary"]:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4) !important;
     }
-    .preset-at-risk button[data-testid="stBaseButton-secondary"] {
+    .stElementContainer[data-testid="stElementContainer"].st-key-at_risk_preset button[data-testid="stBaseButton-secondary"] {
         background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%) !important;
         color: white !important;
         border: none !important;
@@ -187,7 +187,7 @@ st.markdown("""
         transition: all 0.3s ease !important;
         width: 100% !important;
     }
-    .preset-at-risk button[data-testid="stBaseButton-secondary"]:hover {
+    .stElementContainer[data-testid="stElementContainer"].st-key-at_risk_preset button[data-testid="stBaseButton-secondary"]:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4) !important;
     }
